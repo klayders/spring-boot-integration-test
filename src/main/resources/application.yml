@@ -1,0 +1,36 @@
+app:
+  redis:
+    maxTotal: 128
+    maxIdle: 5
+    port: ${REDIS_PORT:6379}
+    host: ${REDIS_HOST:localhost}
+    keys:
+      news: news-
+
+server:
+  address: 0.0.0.0
+  port: 8080
+
+
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:1234}
+  jpa:
+    generate-ddl: true
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+
+  elasticsearch:
+    rest:
+      uris: ${SPRING_ELASTIC_URL:http://localhost:9200}
+
+
+  kafka:
+    bootstrap-servers: ${KAFKA_URL:localhost:9092}
+    group-id: ${KAFKA_GROUP_ID:example}

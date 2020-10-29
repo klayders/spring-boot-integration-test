@@ -1,0 +1,51 @@
+version: '2.2'
+services:
+
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:latest
+    container_name: elastic-single-node
+    environment:
+      - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - 9200:9200
+      - 9300:9300
+
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+
+
+  postgres:
+    image: library/postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=postgres
+    ports:
+      - 5432:5432
+
+  kafka:
+    image: wurstmeister/kafka:2.12-2.0.1
+    ports:
+      - 9092:9092
+    links:
+      - zk
+    depends_on:
+      - zk
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_PORT: 9092
+      KAFKA_ADVERTISED_HOST_NAME: "localhost"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://localhost:9092"
+      KAFKA_LISTENERS: "PLAINTEXT://:9092"
+      KAFKA_ZOOKEEPER_CONNECT: zk:2181/kafka
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_NUM_PARTITIONS: 1
+
+  zk:
+    image: zookeeper
+    ports:
+      - 2181:2181
