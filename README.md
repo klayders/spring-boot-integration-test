@@ -1,6 +1,11 @@
 # This example service with hot news and comments
 
+- Added docker-compose
+- Added integration test 
+- Work with **apache kafka**, **elasticsearch**, **redis**, **postgresql**;
 
+
+## REST API 
 ### add comment
 ```
 curl --location --request POST 'http://localhost:8080/api/v2/comment/add' \
